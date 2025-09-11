@@ -1,0 +1,56 @@
+name: Netlify Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Determine build directory
+        run: |
+          if [ -d dist/wordle-app/browser ]; then
+            echo "BUILD_DIR=dist/wordle-app/browser" >> "$GITHUB_ENV"
+          elif [ -d dist/wordle-app ]; then
+            echo "BUILD_DIR=dist/wordle-app" >> "$GITHUB_ENV"
+          elif [ -d dist ]; then
+            echo "BUILD_DIR=dist" >> "$GITHUB_ENV"
+          else
+            echo "Build output not found under dist/" >&2
+            exit 1
+          fi
+
+      - name: Deploy to Netlify
+        uses: jsmrcaga/action-netlify-deploy@v2.4.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NEW_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.MY_SITE_ID }}
+          NETLIFY_DEPLOY_TO_PROD: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          build_directory: ${{ env.BUILD_DIR }}
