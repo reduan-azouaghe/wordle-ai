@@ -1,0 +1,11 @@
+<section class="board" aria-label="Word grid">
+  @for (rowIndex of rowIndices(); track rowIndex) {
+    <div class="row" [style.--cols]="cols">
+      @for (colIndex of colIndices(); track colIndex) {
+        <div [class]="cellClassFor(results[rowIndex][colIndex])">
+          {{ getCellCharacter(rowIndex, colIndex) }}
+        </div>
+      }
+    </div>
+  }
+</section>

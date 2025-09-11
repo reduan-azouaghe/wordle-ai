@@ -1,0 +1,11 @@
+<section class="keyboard" aria-label="On-screen keyboard">
+  @for (row of keyboardRows; track $index) {
+    <div class="kb-row">
+      @for (key of row; track $index) {
+        <button [class]="keyClass(key)" (click)="onClick(key)">
+          {{ key === 'DEL' ? '⌫' : key }}
+        </button>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,9 @@
+.container { max-width: 500px; margin: 0 auto; padding: 16px; }
+.header { display: flex; align-items: center; justify-content: space-between; }
+.header h1 { margin: 0; font-size: 24px; }
+.reset { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; }
+.reset.primary { background: #6aaa64; color: white; border-color: #6aaa64; }
+.message { text-align: center; margin: 8px 0; color: #333; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: grid; place-items: center; }
+.modal { background: white; padding: 24px; border-radius: 8px; min-width: 280px; text-align: center; }
+

@@ -1,0 +1,33 @@
+<div class="container">
+  <header class="header">
+    <h1>Wordle</h1>
+    <button class="reset" (click)="game.reset()">New Game</button>
+  </header>
+
+  <app-board
+    [rows]="game.rows"
+    [cols]="game.cols"
+    [guesses]="game.guesses()"
+    [results]="game.results()"
+  />
+
+  @if (game.message()) {
+    <div class="message">{{ game.message() }}</div>
+  }
+
+  <app-keyboard
+    [keyboardRows]="game.keyboardRows"
+    [keyStatuses]="game.keyStatuses()"
+    (keyPressed)="handleVirtualKey($event)"
+  />
+
+  @if (game.isFinished()) {
+    <div class="overlay" role="dialog" aria-modal="true">
+      <div class="modal">
+        <h2>{{ game.gameStatus() === 'won' ? 'You win!' : 'Game Over' }}</h2>
+        <p>Answer: <strong>{{ game.solution() }}</strong></p>
+        <button class="reset primary" (click)="game.reset()">Play Again</button>
+      </div>
+    </div>
+  }
+</div>
