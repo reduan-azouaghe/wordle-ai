@@ -34,10 +34,13 @@ export class WordleService {
   /** Add a letter to the current guess (if space remains). */
   typeLetter(letter: string) {
     if (this.isFinished()) return;
+
     const rowIndex = this.currentRow();
     const updatedGuesses = [...this.guesses()];
     const currentGuess = updatedGuesses[rowIndex];
+
     if (currentGuess.length >= this.cols) return;
+
     updatedGuesses[rowIndex] = currentGuess + letter.toUpperCase();
     this.guesses.set(updatedGuesses);
     this.clearMessage();
@@ -46,10 +49,13 @@ export class WordleService {
   /** Remove the last letter in the current guess. */
   backspace() {
     if (this.isFinished()) return;
+
     const rowIndex = this.currentRow();
     const updatedGuesses = [...this.guesses()];
     const currentGuess = updatedGuesses[rowIndex];
+
     if (currentGuess.length === 0) return;
+
     updatedGuesses[rowIndex] = currentGuess.slice(0, -1);
     this.guesses.set(updatedGuesses);
     this.clearMessage();
@@ -58,8 +64,10 @@ export class WordleService {
   /** Submit the current guess and update the board/keyboard status. */
   submitGuess() {
     if (this.isFinished()) return;
+
     const rowIndex = this.currentRow();
     const guess = this.guesses()[rowIndex];
+
     if (guess.length < this.cols) return this.showMessage('Not enough letters');
     if (!this.dictionary.isValid(guess)) return this.showMessage('Not in word list');
 
@@ -71,33 +79,40 @@ export class WordleService {
     // Update keyboard statuses with precedence: correct > present > absent
     const statuses = { ...this.keyStatuses() } as KeyStatuses;
     const precedence = { absent: 0, present: 1, correct: 2 } as const;
+
     for (let colIndex = 0; colIndex < this.cols; colIndex++) {
       const char = guess[colIndex];
       const status = evaluation[colIndex]!;
       const existing = statuses[char];
+      
       if (!existing || precedence[status] > precedence[existing]) {
         statuses[char] = status;
       }
     }
+
     this.keyStatuses.set(statuses);
 
     // Win / advance / lose
     if (guess === this.solution()) {
       this.gameStatus.set('won');
       this.showMessage('Genius!');
+
       return;
     }
     if (rowIndex + 1 >= this.rows) {
       this.gameStatus.set('lost');
       this.showMessage(`The word was ${this.solution()}`);
+
       return;
     }
+
     this.currentRow.set(rowIndex + 1);
   }
 
   /** Show a transient message in the UI. */
   showMessage(message: string) {
     this.message.set(message);
+
     setTimeout(() => {
       if (this.message() === message && this.gameStatus() === 'playing') this.message.set(null);
     }, 1500);
@@ -111,9 +126,11 @@ export class WordleService {
   /** Reset the entire game to a new random solution. */
   reset() {
     this.guesses.set(Array.from({ length: this.rows }, () => ''));
+
     this.results.set(
       Array.from({ length: this.rows }, () => Array.from({ length: this.cols }, () => null))
     );
+    
     this.currentRow.set(0);
     this.message.set(null);
     this.gameStatus.set('playing');

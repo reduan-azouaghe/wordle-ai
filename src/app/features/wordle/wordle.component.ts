@@ -17,16 +17,31 @@ export class WordleComponent {
   @HostListener('window:keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
     if (this.game.isFinished()) return;
+
     const key = event.key;
-    if (key === 'Enter') { event.preventDefault(); this.game.submitGuess(); return; }
-    if (key === 'Backspace' || key === 'Delete') { event.preventDefault(); this.game.backspace(); return; }
+    if (key === 'Enter') {
+      event.preventDefault();
+      this.game.submitGuess();
+
+      return;
+    }
+    if (key === 'Backspace' || key === 'Delete') {
+      event.preventDefault();
+      this.game.backspace();
+
+      return;
+    }
+
     if (/^[a-zA-Z]$/.test(key)) this.game.typeLetter(key.toUpperCase());
   }
 
   handleVirtualKey(key: string) {
     if (this.game.isFinished()) return;
+
     if (key === 'ENTER') return this.game.submitGuess();
+
     if (key === 'DEL') return this.game.backspace();
+    
     this.game.typeLetter(key);
   }
 }

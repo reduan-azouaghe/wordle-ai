@@ -117,14 +117,22 @@
   cursor: pointer;
 }
 
-.key.correct { background: var(--correct); }
-.key.present { background: var(--present); }
-.key.absent { background: var(--absent); }
+.key.correct {
+  background: var(--correct);
+}
+
+.key.present {
+  background: var(--present);
+}
+
+.key.absent {
+  background: var(--absent);
+}
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;

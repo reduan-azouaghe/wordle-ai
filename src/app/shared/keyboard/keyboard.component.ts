@@ -10,6 +10,7 @@ import { KeyStatuses } from '../../core/models';
 export class KeyboardComponent {
   /** Keyboard rows, e.g., [[Q..P],[A..L],[ENTER..DEL]] */
   @Input({ required: true }) keyboardRows: string[][] = [];
+  
   /** Mapping from letter to evaluation status (for coloring). */
   @Input({ required: true }) keyStatuses: KeyStatuses = {};
 
